@@ -178,6 +178,9 @@ def _handle_sensor_data(data):
         elif gesture[0] == 'garbage' and callable(_on_garbage):
             _on_garbage()
 
+        elif gesture[0] == 'circle' and callable(_on_circle):
+            _on_circle(gesture[1])
+
     if d_configmask & SW_DATA_TOUCH:
         # We have a touch
         d_action = d_touch[1] << 8 | d_touch[0]
@@ -483,6 +486,22 @@ def airwheel():
     def register(handler):
         global _on_airwheel
         _on_airwheel = handler
+
+    return register
+
+
+def circle():
+    '''Bind an action to the "circle" gesture
+
+    The handler will receive the direction of the gesture
+    (``'clockwise'`` or ``'counter-clockwise'``)
+    '''
+
+    setup()
+
+    def register(handler):
+        global _on_circle
+        _on_circle = handler
 
     return register
 

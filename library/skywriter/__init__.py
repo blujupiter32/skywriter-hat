@@ -159,7 +159,7 @@ def _handle_sensor_data(data):
         if callable(_on_move):
             _on_move(x, y, z)
 
-    if d_configmask & SW_DATA_GESTURE and d_gesture[0]:
+    if d_configmask & SW_DATA_GESTURE and d_gesture[0] > 0 and d_gesture[0] <= 7:
         # We have a gesture!
         # is_edge = (d_gesture[3] & 0b00000001) > 0
         gesture = (

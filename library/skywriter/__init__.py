@@ -52,7 +52,6 @@ _round_to = 4
 _enable_auto_calibration = False
 _enable_events = True
 _debug = False
-gesture = 0
 
 io_error_count = 0
 
@@ -160,10 +159,10 @@ def _handle_sensor_data(data):
         if callable(_on_move):
             _on_move(x, y, z)
 
-    if d_configmask & SW_DATA_GESTURE and not d_gesture[0] == 0:
+    if d_configmask & SW_DATA_GESTURE and d_gesture[0]:
         # We have a gesture!
         # is_edge = (d_gesture[3] & 0b00000001) > 0
-        gestures = [
+        gesture = (
             ('garbage', '', ''),
             ('flick', 'west', 'east'),
             ('flick', 'east', 'west'),
@@ -171,14 +170,13 @@ def _handle_sensor_data(data):
             ('flick', 'north', 'south'),
             ('circle', 'clockwise', ''),
             ('circle', 'counter-clockwise', '')
-        ]
-        for i, gesture in enumerate(gestures):
-            if d_gesture[0] == i + 1:
+        )[d_gesture[0] - 1]
 
-                if gesture[0] == 'flick' and callable(_on_flick):
-                    _on_flick(gesture[1], gesture[2])
+        if gesture[0] == 'flick' and callable(_on_flick):
+            _on_flick(gesture[1], gesture[2])
 
-                break
+        elif gesture[0] == 'garbage' and callable(_on_garbage):
+            _on_garbage()
 
     if d_configmask & SW_DATA_TOUCH:
         # We have a touch

@@ -37,4 +37,12 @@ def tap(position):
 def touch(position):
     print('Touch!', position)
 
+@skywriter.garbage()
+def garbage():
+    print('Got a garbage gesture!')
+
+@skywriter.circle()
+def circle(direction):
+    print('Got a {} circle!'.format(direction))
+
 signal.pause()
